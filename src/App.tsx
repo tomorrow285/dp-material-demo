@@ -1,13 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { parse } from './cif-tools/Text/Parser'
 import { parseCifText } from './molstar/mol-io/reader/cif/text/parser'
 import { CIFLoader } from  'cifloader3'
+import Viewer from './viewer'
 import './App.css'
 
 const loader = new CIFLoader();
 
 function App() {
   const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    Viewer.init()
+    return () => {
+      Viewer.dispose()
+    }
+  }, [])
 
   return (
     <div className="App">
