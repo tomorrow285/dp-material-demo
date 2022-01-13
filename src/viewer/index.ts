@@ -18,7 +18,6 @@ namespace Viewer {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight - 20);
-    // renderer.localClippingEnabled = true;
     document.body.appendChild(renderer.domElement);
 
     scene = new THREE.Scene();
@@ -37,7 +36,6 @@ namespace Viewer {
     scene.add(light);
 
     (() => {
-      //create a blue LineBasicMaterial
       const material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 10 });
       const points = [];
       points.push(new THREE.Vector3(-1, 0, 0));
@@ -58,20 +56,28 @@ namespace Viewer {
     })();
     (() => {
       const geometry = new THREE.SphereGeometry(.1);
-      // const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
       const material = new THREE.MeshLambertMaterial({
-        color: 0xffff00,
+        color: 0xffff0033,
         side: THREE.DoubleSide,
-        // clippingPlanes: clipPlanes,
-        // clipIntersection: params.clipIntersection
 
       });
       const sphere = new THREE.Mesh(geometry, material);
-      sphere.translateX(1)
-      console.log(sphere.position)
-      // sphere.applyMatrix4(new THREE.Matrix4())
-      // sphere.position = new THREE.Vector3(1, 0, 0)
+      sphere.position.x = 1
       scene.add(sphere);
+    })();
+
+    (() => {
+      const heartShape = new THREE.Shape();
+
+      heartShape.lineTo(.1, .1);
+      heartShape.lineTo(-.1, .1)
+      heartShape.lineTo(.1, -.1)
+
+      const geometry = new THREE.ShapeGeometry(heartShape);
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide, opacity: .6, transparent: true });
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+
     })();
 
     render()
