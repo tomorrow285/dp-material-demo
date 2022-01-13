@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { parse } from './cif-tools/Text/Parser'
 import { parseCifText } from './molstar/mol-io/reader/cif/text/parser'
 import { CIFLoader } from  'cifloader3'
+import {Object3D} from './viewer/Object3D'
+import {demoGeometry} from './viewer/StructureGeometry'
 import Viewer from './viewer'
 import './App.css'
 
@@ -11,9 +13,11 @@ function App() {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    Viewer.init()
+    // Viewer.init()
+    Object3D.init()
+    Object3D.add(demoGeometry)
     return () => {
-      Viewer.dispose()
+      // Viewer.dispose()
     }
   }, [])
 
