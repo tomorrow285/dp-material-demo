@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     // Viewer.init()
     Object3D.init()
-    Object3D.add(demoGeometry)
+    // Object3D.add(demoGeometry)
     return () => {
       // Viewer.dispose()
     }

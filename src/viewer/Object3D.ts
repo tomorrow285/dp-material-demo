@@ -1,8 +1,7 @@
 
 import * as THREE from 'three';
-// import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { StructureGeometry } from './StructureGeometry'
+import { BallStickRepresentation } from '../repr/ball-stick';
 
 export namespace Object3D {
   let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, controls: OrbitControls, group: THREE.Group;
@@ -40,67 +39,22 @@ export namespace Object3D {
     offset = new THREE.Vector3()
     sphereGeometry = new THREE.IcosahedronGeometry(1, 3)
     boxGeometry = new THREE.BoxGeometry(1, 1, 1)
+
+    const repr = BallStickRepresentation()
+    repr.createOrUpdate()
+    group.add(repr.renderObjects)
+    renderer.render(scene, camera);
+
   }
 
   export function render() {
     renderer.render(scene, camera);
   }
 
-  export function add(structure: StructureGeometry) {
-    const { atoms, bonds } = structure
-    structure.computeBoundingBox();
-    structure.boundingBox!.getCenter(offset).negate();
-    atoms.translate(offset.x, offset.y, offset.z);
-    bonds.translate(offset.x, offset.y, offset.z);
-    createAtomObjects(atoms)
-    createBoneObjects(bonds)
-    render()
-  }
+  // export function add(structure: StructureGeometry) {
+  //   const { atoms, bonds } = structure
+  //   structure.computeBoundingBox();
+  //   structure.boundingBox!.getCenter(offset).negate();
+  // }
 
-  function createAtomObjects(atoms: THREE.BufferGeometry) {
-    const positions = atoms.getAttribute('position');
-    const colors = atoms.getAttribute('color');
-    const position = new THREE.Vector3();
-    const color = new THREE.Color();
-    for (let i = 0; i < positions.count; i++) {
-      position.x = positions.getX(i);
-      position.y = positions.getY(i);
-      position.z = positions.getZ(i);
-      color.r = colors.getX(i);
-      color.g = colors.getY(i);
-      color.b = colors.getZ(i);
-      const material = new THREE.MeshPhongMaterial({ color: color });
-      const object = new THREE.Mesh(sphereGeometry, material);
-      object.position.copy(position);
-      object.position.multiplyScalar(75);
-      object.scale.multiplyScalar(25);
-      group.add(object)
-    }
-  }
-
-  function createBoneObjects(bonds: THREE.BufferGeometry) {
-    const positions = bonds.getAttribute('position');
-    const start = new THREE.Vector3();
-    const end = new THREE.Vector3();
-
-    for (let i = 0; i < positions.count; i += 2) {
-      start.x = positions.getX(i);
-      start.y = positions.getY(i);
-      start.z = positions.getZ(i);
-
-      end.x = positions.getX(i + 1);
-      end.y = positions.getY(i + 1);
-      end.z = positions.getZ(i + 1);
-
-      start.multiplyScalar(75);
-      end.multiplyScalar(75);
-
-      const object = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({ color: 0xffffff }));
-      object.position.copy(start);
-      object.position.lerp(end, 0.5);
-      object.scale.set(5, 5, start.distanceTo(end));
-      object.lookAt(end);
-      group.add(object);
-    }
-  }
 }
