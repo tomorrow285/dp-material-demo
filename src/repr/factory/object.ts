@@ -3,8 +3,9 @@ import * as THREE from "three"
 const sphereGeometry = new THREE.IcosahedronGeometry(1, 3)
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1)
 
-export function createSphereObject(position: THREE.Vector3) {
-  const material = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+export function createSphereObject(position: THREE.Vector3, color: string | number = 0xff0000) {
+  // const material = new THREE.MeshBasicMaterial({ color });
+  const material = new THREE.MeshPhongMaterial({ color });
   const object = new THREE.Mesh(sphereGeometry, material);
   object.position.copy(position);
   object.position.multiplyScalar(75);
