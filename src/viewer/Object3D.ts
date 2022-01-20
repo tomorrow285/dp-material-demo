@@ -2,6 +2,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { BallStickRepresentation } from '../repr/ball-stick';
+import { CovalentBond } from '../repr/bonds';
+
+// TODO: rename => visualizer
 
 export namespace Object3D {
   let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, controls: OrbitControls, group: THREE.Group;
@@ -45,6 +48,8 @@ export namespace Object3D {
     group.add(repr.renderObjects)
     renderer.render(scene, camera);
 
+
+    CovalentBond.getCovalentBonds()
   }
 
   export function render() {
