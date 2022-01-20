@@ -15,18 +15,18 @@ function App() {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    Viewer.init()
-    // Object3D.init()
+    // Viewer.init()
+    Object3D.init()
     // Object3D.add(demoGeometry)
-    const lattice = Lattice.from_parameters(3.84, 3.84, 3.84, 120,
-      90, 60)
-    console.log("lattice",lattice);
+    // const lattice = Lattice.from_parameters(3.84, 3.84, 3.84, 120,
+    //   90, 60)
+    // console.log("lattice",lattice);
     
-    const coords = [[0, 0, 0], [0.75,0.5,0.75]]
-    const struct = new Structure(lattice, ["C", "H"], coords)
-    console.log("struct",struct);
+    // const coords = [[0, 0, 0], [0.75,0.5,0.75]]
+    // const struct = new Structure(lattice, ["C", "H"], coords)
+    // console.log("struct",struct);
     return () => {
-      Viewer.dispose()
+      // Viewer.dispose()
     }
 
   }, [])

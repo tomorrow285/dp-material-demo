@@ -1,13 +1,14 @@
+import { Structure } from "../core/structure";
 import { CylinderFactory } from "./factory/cylinder";
 import { LineFactory } from "./factory/line";
-import { SphereFactory } from "./factory/sphere";
+import { getAtomSphereParmas, SphereFactory } from "./factory/sphere";
 import { Representation } from "./representation";
 // TODO: Display style => Line Stick Ball&stick CPK Polyhedron
 
-export function BallStickRepresentation() {
+export function BallStickRepresentation(structure: Structure) {
   return Representation.createMulti({
-    'ball': () => SphereFactory(),
-    'stick': () => CylinderFactory(),
-    'line': () => LineFactory()
+    'ball': () => SphereFactory(structure, getAtomSphereParmas),
+    'stick': () => CylinderFactory(structure),
+    'line': () => LineFactory(structure)
   })
 }

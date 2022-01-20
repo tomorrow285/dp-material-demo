@@ -1,8 +1,10 @@
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import Lattice from '../core/lattice';
+import { Structure } from '../core/structure';
 import { BallStickRepresentation } from '../repr/ball-stick';
-import { CovalentBond } from '../repr/bonds';
+// import { CovalentBond } from '../repr/bonds';
 
 // TODO: rename => visualizer
 
@@ -43,16 +45,37 @@ export namespace Object3D {
     sphereGeometry = new THREE.IcosahedronGeometry(1, 3)
     boxGeometry = new THREE.BoxGeometry(1, 1, 1)
 
-    const repr = BallStickRepresentation()
-    repr.createOrUpdate()
-    group.add(repr.renderObjects)
-    renderer.render(scene, camera);
+    demo()
 
 
-    CovalentBond.getCovalentBonds()
+    // CovalentBond.getCovalentBonds()
   }
 
   export function render() {
+    renderer.render(scene, camera);
+  }
+
+  export function demo() {
+    const lattice = Lattice.from_parameters(4.97352800, 4.97352800, 4.97352800, 90,
+      90, 90)
+    const coords = [
+      [0.37280000, 0.37280000, 0.62720000],
+      [0.62720000, 0.37280000, 0.37280000],
+      [0.37280000, 0.62720000, 0.37280000],
+      [0.12720000, 0.12720000, 0.12720000],
+      [0.87280000, 0.87280000, 0.12720000],
+      [0.12720000, 0.87280000, 0.87280000],
+      [0.87280000, 0.12720000, 0.87280000],
+      [0.62720000, 0.62720000, 0.62720000],
+      [0.00000000, 0.00000000, 0.00000000],
+      [0.50000000, 0.50000000, 0.50000000],
+    ]
+    const struct = new Structure(lattice, ["H", "H", "H", "H", "H", "H", "H", "H", "C", "C"], coords)
+
+    console.log(struct)
+    const repr = BallStickRepresentation(struct)
+    repr.createOrUpdate()
+    group.add(repr.renderObjects)
     renderer.render(scene, camera);
   }
 

@@ -1,16 +1,16 @@
 import * as THREE from "three"
+import { Structure } from "../../core/structure";
 import { createSphereObject } from "./object";
 
-export function SphereFactory(structure?: any) {
+type GetSphere = (structure: Structure) => THREE.Vector3[]
+
+export function SphereFactory(structure: Structure, getSphere: GetSphere) {
   const group = new THREE.Group();
 
   return {
     createOrUpdate() {
       group.clear()
-      const positions = new Array(6).fill('').map((a, i) => {
-        const n = .4 * i
-        return new THREE.Vector3(n, n, n)
-      })
+      const positions = getSphere(structure)
       positions.forEach((pos) => {
         const object = createSphereObject(pos)
         group.add(object)
@@ -21,4 +21,11 @@ export function SphereFactory(structure?: any) {
       return group
     }
   }
+}
+
+export function getAtomSphereParmas(structure: Structure) {
+  return structure.sites.map((site) => {
+    const { coords } = site
+    return new THREE.Vector3(...coords)
+  })
 }
