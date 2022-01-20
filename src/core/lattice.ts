@@ -1,31 +1,34 @@
+import * as THREE from 'three'
+
 export default class Lattice {
     /**
      * 一个晶格对象。本质上是一个矩阵和转换矩阵。
      * 除非另有说明，一般假定长度单位为埃，角度单位为度。
      */
-    static angles:number[] = [];
-    static alpha:number = 0;
-    static beta:number = 0;
-    static gamma:number = 0;
-    static abc:number[] = [];
-    static a:number = 0;
-    static b:number = 0;
-    static c:number = 0;
-    static matrix:any = [];
+    static angles: number[] = [];
+    static alpha: number = 0;
+    static beta: number = 0;
+    static gamma: number = 0;
+    static abc: number[] = [];
+    static a: number = 0;
+    static b: number = 0;
+    static c: number = 0;
+    public matrix3: THREE.Matrix3;
+    // static matrix: any = [];
     constructor(public matrix: number[][]) {
-        this.matrix = matrix;
+        this.matrix3 = new THREE.Matrix3()
+        this.matrix3.elements = matrix.flat()
     }
 
     // 坐标系转化
-    get_cartesian_coords (fractional_coords: number[]) {
-        // TODO:坐标系转换:矩阵 * 向量
-        // this.matrix * fractional_coords
-        return [];
+    get_cartesian_coords(fractional_coords: number[]) {
+        const v = new THREE.Vector3(...fractional_coords).applyMatrix3(this.matrix3)
+        return [v.x, v.y, v.z];
     }
 
     // 获取晶胞长度及角度
-    static from_parameters(a:number, b:number, c:number, alpha:number, beta:number, gamma:number) {
-        this.abc= [a, b, c];
+    static from_parameters(a: number, b: number, c: number, alpha: number, beta: number, gamma: number) {
+        this.abc = [a, b, c];
         this.angles = [alpha, beta, gamma];
 
         this.alpha = alpha;
@@ -53,7 +56,7 @@ export default class Lattice {
             [a21, a22, a23],
             [a31, a32, a33],
         ];
-        this.matrix = matrix;
+        // this.matrix = matrix;
 
         return new Lattice(matrix);
     }
