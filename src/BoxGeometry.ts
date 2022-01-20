@@ -105,18 +105,19 @@ class BoxGeometry extends BufferGeometry {
 					//a21, a31, a32 = 0
 					//a11 = a
 					//other matrix entries as below:
-					let a12 = vector.y * Math.cos(gamma * angle)
-					let a13 = vector.z * Math.cos(beta * angle)
-	
-					let a22 = vector.y * Math.sin(gamma * angle)
-					let a23 = vector.z * (Math.cos(alpha * angle) - Math.cos(beta * angle) * Math.cos(gamma * angle)) / Math.sin(gamma * angle)
-	
-					let a33 = vector.z * (Math.sqrt(1 - Math.pow(Math.cos(alpha * angle), 2) - Math.pow(Math.cos(beta * angle), 2) - Math.pow(Math.cos(gamma * angle), 2) + 2 * Math.cos(alpha * angle) * Math.cos(beta * angle) * Math.cos(gamma * angle))) / Math.sin(gamma * angle)
-	
-					//xyz = [A]*(xyz)_frac
-					let x1 = vector.x * 2 + a12 * 3 + a13 * 4
-					let y1 = a22 * 3 + a23 * 4
-					let z1 = a33 * 4
+
+					const a12 = vector.y * Math.cos(gamma * angle)
+					const a13 = vector.z * Math.cos(beta * angle)
+					
+					const a22 = vector.y * Math.sin(gamma * angle)
+					const a23 = vector.z * (Math.cos(alpha * angle) - Math.cos(beta * angle) * Math.cos(gamma * angle)) / Math.sin(gamma * angle)
+					
+					const a33 = vector.z * (Math.sqrt(1 - Math.pow(Math.cos(alpha * angle), 2) - Math.pow(Math.cos(beta * angle), 2) - Math.pow(Math.cos(gamma * angle), 2) + 2 * Math.cos(alpha * angle) * Math.cos(beta * angle) * Math.cos(gamma * angle))) / Math.sin(gamma * angle)
+					
+					//xyz = [A]*(xyz)
+					const x1 = vector.x + a12 + a13
+					const y1 = a22 + a23
+					const z1 = a33
 
 					// const vector1 = vector.applyMatrix3(matrix)
 					// console.log(matrix, 'matrix');
