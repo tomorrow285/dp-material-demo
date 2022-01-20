@@ -1,5 +1,5 @@
 import { Structure } from "../core/structure";
-import { CylinderFactory } from "./factory/cylinder";
+import { CylinderFactory, getBondsCylinderParmas } from "./factory/cylinder";
 import { LineFactory } from "./factory/line";
 import { getAtomSphereParmas, SphereFactory } from "./factory/sphere";
 import { Representation } from "./representation";
@@ -8,7 +8,7 @@ import { Representation } from "./representation";
 export function BallStickRepresentation(structure: Structure) {
   return Representation.createMulti({
     'ball': () => SphereFactory(structure, getAtomSphereParmas),
-    'stick': () => CylinderFactory(structure),
+    'stick': () => CylinderFactory(structure, getBondsCylinderParmas),
     'line': () => LineFactory(structure)
   })
 }

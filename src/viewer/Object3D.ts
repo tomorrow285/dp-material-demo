@@ -72,7 +72,8 @@ export namespace Object3D {
     ]
     const struct = new Structure(lattice, ["H", "H", "H", "H", "H", "H", "H", "H", "C", "C"], coords)
 
-    console.log(struct)
+    // console.log(struct.sites[0])
+    // console.log(struct.getNearNeighbor(4))
     const repr = BallStickRepresentation(struct)
     repr.createOrUpdate()
     group.add(repr.renderObjects)

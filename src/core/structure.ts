@@ -5,6 +5,15 @@ class Neighbor extends Site {
     /**
      * site子类，包含一个相邻原子
      */
+    constructor(
+        public species: object,
+        public coords: number[],
+        public properties: object,
+        public nn_distance: number,
+        public index = 0
+    ) {
+        super(species, coords, properties)
+    }
 }
 
 class PeriodicNeighbor extends PeriodicSite {
@@ -21,7 +30,7 @@ class SiteCollection {
      * no periodicity) and Structure (a collection of PeriodicSites, i.e.,
      * periodicity). Not meant to be instantiated directly.
      */
-    DISTANCE_TOLERANCE:number = 0.5
+    DISTANCE_TOLERANCE: number = 0.5
 }
 
 class IMolecule {
@@ -62,9 +71,31 @@ export class IStructure {
     /**
      * 具有周期性的基本不可变结构对象。
      */
-    sites:any[] = [];
+    sites: any[] = [];
+
+    getSitesInSphere(site: Site, r: number) {
+        const neighbors: Neighbor[] = []
+
+        this.sites.forEach((s, idx) => {
+            if (s === site) return
+            const dist = site.distance(s)
+            if (dist < r) {
+                neighbors.push(new Neighbor(s.species, s.coords, s.properties, dist, idx))
+            }
+        })
+
+        return neighbors
+    }
+
+    getNearNeighbor(n: number, tol = 0.1, cutoff = 10.0) {
+        const site = this.sites[n]
+        const neighbors = this.getSitesInSphere(site, cutoff)
+        const minDist = Math.min.apply(null, neighbors.map(nb => nb.nn_distance))
+        return neighbors.filter(nb => nb.nn_distance < (1 + tol) * minDist)
+    }
+
     constructor(
-        public lattice:any,
+        public lattice: any,
         public species: any[] = [],
         public coords: Array<any> = [],
         public charge: number = 0,
@@ -88,7 +119,7 @@ export class IStructure {
         this.coords_are_cartesian = coords_are_cartesian;
         this.site_properties = site_properties;
 
-        for(let i = 0; i < species.length; i++) {
+        for (let i = 0; i < species.length; i++) {
             const prop = {};
             this.sites.push(new PeriodicSite(
                 species[i],
@@ -107,7 +138,7 @@ export class Structure extends IStructure {
      * 可变的结构对象。
      */
     constructor(
-        public lattice:any,
+        public lattice: any,
         public species: any[] = [],
         public coords: Array<any> = [],
         public charge: number = 0,

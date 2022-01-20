@@ -1,17 +1,17 @@
 import * as THREE from "three"
+import { Structure } from "../../core/structure";
 import { createCylinderObject } from "./object";
 
-export function CylinderFactory(structure?: any) {
+
+type GetCylinder = (structure: Structure) => [THREE.Vector3, THREE.Vector3][]
+
+export function CylinderFactory(structure: Structure, getCylinder: GetCylinder) {
   const group = new THREE.Group();
 
   return {
     createOrUpdate() {
       group.clear()
-      const positions = new Array(6).fill('').map((a, i) => {
-        const n = .4 * i
-        const j = -.4
-        return [new THREE.Vector3(n, n, n), new THREE.Vector3(n, n, j)]
-      })
+      const positions = getCylinder(structure)
       positions.forEach(([s, e]) => {
         const object = createCylinderObject(s, e)
         group.add(object)
@@ -22,4 +22,31 @@ export function CylinderFactory(structure?: any) {
       return group
     }
   }
+}
+
+export function getBondsCylinderParmas(structure: Structure): [THREE.Vector3, THREE.Vector3][] {
+  const { sites } = structure
+  const bonds = new Map<string, number[]>()
+  const invertedBonds = new Set<string>()
+
+  for (let i = 0; i < sites.length; i++) {
+    structure.getNearNeighbor(i, .1, 3).forEach(nb => {
+      const bond = [i, nb.index]
+      const invertBond = [nb.index, i]
+      const tag = bond.join('-')
+      const invertTag = invertBond.join('-')
+      if (bonds.has(tag)) { return }
+      if (invertedBonds.has(invertTag)) { return }
+      bonds.set(tag, bond)
+      invertedBonds.add(invertTag)
+    })
+  }
+
+  return [...bonds.values()].map((bond => {
+    const [s, e] = bond
+    return [
+      new THREE.Vector3(...sites[s].coords),
+      new THREE.Vector3(...sites[e].coords)
+    ]
+  }))
 }

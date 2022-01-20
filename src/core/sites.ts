@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import Lattice from './lattice'
 
 export class Site {
@@ -18,14 +19,14 @@ export class Site {
      * skip_checks: 是否忽略所有常规检查，只创建站点。如果站点是以受控的方式创建并且需要速度，请使用此方法
      */
     // x,y,z坐标
-    x:number;
-    y:number;
-    z:number;
+    x: number;
+    y: number;
+    z: number;
     constructor(
-        public species:object,
-        public coords:number[],
-        public properties:object,
-        public skip_checks:boolean = false
+        public species: object,
+        public coords: number[],
+        public properties: object,
+        public skip_checks: boolean = false
     ) {
         if (!!this.skip_checks) {
             // TODO:skip_checks
@@ -55,15 +56,15 @@ export class Site {
      * 测量与另一个site的距离
      * @param other:site
      */
-    distance(other:any) {
-
+    distance(other: Site) {
+        return new THREE.Vector3(...this.coords).distanceTo(new THREE.Vector3(...other.coords))
     }
 
     /**
      * 返回site与空间中一个点之间的距离
      * @param pt:point
      */
-    distance_from_point(pt:any) {
+    distance_from_point(pt: any) {
 
     }
 
@@ -87,7 +88,7 @@ export class Site {
      */
     species_string() {
         if (this.is_ordered()) {
-            
+
         }
     }
 
@@ -101,19 +102,19 @@ export class PeriodicSite extends Site {
     /**
      * 周期性的站点。
      */
-    frac_coords:any;
+    frac_coords: any;
     // a,b,c坐标
-    a:number;
-    b:number;
-    c:number;
+    a: number;
+    b: number;
+    c: number;
     constructor(
-        public species:object,
-        public coords:number[],
-        public lattice:Lattice,
+        public species: object,
+        public coords: number[],
+        public lattice: Lattice,
         public to_unit_cell: boolean = false,
         public coords_are_cartesian: boolean = false,
-        public properties:object,
-        public skip_checks:boolean = false
+        public properties: object,
+        public skip_checks: boolean = false
     ) {
         super(species, coords, properties, skip_checks)
         this.lattice = lattice;
