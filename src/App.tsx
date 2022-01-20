@@ -6,6 +6,8 @@ import {Object3D} from './viewer/Object3D'
 import {demoGeometry} from './viewer/StructureGeometry'
 import Viewer from './viewer'
 import './App.css'
+import Lattice from './core/lattice'
+import {Structure} from './core/structure'
 
 const loader = new CIFLoader();
 
@@ -13,12 +15,20 @@ function App() {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    // Viewer.init()
-    Object3D.init()
+    Viewer.init()
+    // Object3D.init()
     // Object3D.add(demoGeometry)
+    const lattice = Lattice.from_parameters(3.84, 3.84, 3.84, 120,
+      90, 60)
+    console.log("lattice",lattice);
+    
+    const coords = [[0, 0, 0], [0.75,0.5,0.75]]
+    const struct = new Structure(lattice, ["C", "H"], coords)
+    console.log("struct",struct);
     return () => {
-      // Viewer.dispose()
+      Viewer.dispose()
     }
+
   }, [])
 
   return (
