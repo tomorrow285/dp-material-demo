@@ -14,7 +14,7 @@ export function SphereFactory(structure: Structure, getSphere: GetSphere) {
       const positions = getSphere(structure)
       positions.forEach((pos, i) => {
         const { species } = structure.sites[i]
-        const rgb = VESTA_COLOR[species]
+        const rgb = VESTA_COLOR[species as unknown as string]
         const object = createSphereObject(pos, `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`)
         group.add(object)
       })

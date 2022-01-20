@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import Lattice from './lattice'
+import { Species } from './structure.type'
+
 
 export class Site {
     /**
@@ -23,9 +25,9 @@ export class Site {
     y: number;
     z: number;
     constructor(
-        public species: object,
+        public species: Species,
         public coords: number[],
-        public properties: object,
+        public properties: { [key: string]: number },
         public skip_checks: boolean = false
     ) {
         if (!!this.skip_checks) {
@@ -64,7 +66,7 @@ export class Site {
      * 返回site与空间中一个点之间的距离
      * @param pt:point
      */
-    distance_from_point(pt: any) {
+    distance_from_point(pt: number[]) {
 
     }
 
@@ -102,18 +104,18 @@ export class PeriodicSite extends Site {
     /**
      * 周期性的站点。
      */
-    frac_coords: any;
+    frac_coords: number[] = [];
     // a,b,c坐标
     a: number;
     b: number;
     c: number;
     constructor(
-        public species: object,
+        public species: Species,
         public coords: number[],
         public lattice: Lattice,
         public to_unit_cell: boolean = false,
         public coords_are_cartesian: boolean = false,
-        public properties: object,
+        public properties: { [key: string]: number },
         public skip_checks: boolean = false
     ) {
         super(species, coords, properties, skip_checks)
@@ -146,10 +148,6 @@ export class PeriodicSite extends Site {
         this.b = b;
         this.c = c;
 
-        const [x, y, z] = this.coords;
-        this.x = x;
-        this.y = y;
-        this.z = z;
     }
 
     // to_unit_cell(in_place) {
