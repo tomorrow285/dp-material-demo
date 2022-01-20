@@ -1,63 +1,55 @@
-import { BufferGeometry } from 'three/src/core/BufferGeometry';
-import { Float32BufferAttribute } from 'three/src/core/BufferAttribute';
+import { BoxGeometry } from 'three';
 import { Vector3 } from 'three/src/math/Vector3.js';
 import { Matrix3 } from 'three/src/math/Matrix3.js';
-import { Matrix4 } from 'three/src/math/Matrix4.js';
-
-class BoxGeometry extends BufferGeometry {
-    public parameters;
-	constructor( width = 1, height = 1, depth = 1, widthSegments = 1, heightSegments = 1, depthSegments = 1 ) {
-
+import Lattice from './core/lattice';
+export default class LatticeGeometry extends BoxGeometry {
+	constructor(
+		public a: number,
+        public b: number,
+        public c: number,
+        public alpha: number,
+        public beta: number,
+        public gamma: number,
+        public matrix3: Matrix3
+	) {
 		super();
 
-		this.type = 'BoxGeometry';
-
-		this.parameters = {
-			width: width,
-			height: height,
-			depth: depth,
-			widthSegments: widthSegments,
-			heightSegments: heightSegments,
-			depthSegments: depthSegments
-		};
-
-		const scope = this;
-
-		// segments
-
-		widthSegments = Math.floor( widthSegments );
-		heightSegments = Math.floor( heightSegments );
-		depthSegments = Math.floor( depthSegments );
-
-		// buffers
+		this.a = a;
+        this.b = b;
+        this.c = c;
+        this.alpha = alpha;
+        this.beta = beta;
+        this.gamma = gamma;
+        this.matrix3 = matrix3;
 
 		const indices = [];
 		const vertices = [];
 		const normals = [];
 		const uvs = [];
 
-		// helper variables
-
 		let numberOfVertices = 0;
 		let groupStart = 0;
 
-		// build each side of the box geometry
+		const scope = this;
 
-		buildPlane( 'z', 'y', 'x', - 1, - 1, depth, height, width, depthSegments, heightSegments, 0 ); // px
-		buildPlane( 'z', 'y', 'x', 1, - 1, depth, height, - width, depthSegments, heightSegments, 1 ); // nx
-		buildPlane( 'x', 'z', 'y', 1, 1, width, depth, height, widthSegments, depthSegments, 2 ); // py
-		buildPlane( 'x', 'z', 'y', 1, - 1, width, depth, - height, widthSegments, depthSegments, 3 ); // ny
-		buildPlane( 'x', 'y', 'z', 1, - 1, width, height, depth, widthSegments, heightSegments, 4 ); // pz
-		buildPlane( 'x', 'y', 'z', - 1, - 1, width, height, - depth, widthSegments, heightSegments, 5 ); // nz
+		buildPlane( 'z', 'y', 'x', - 1, - 1, depth, height, width, depthSegments, heightSegments, 0 );
 
-		// build geometry
-
-		this.setIndex( indices );
-		this.setAttribute( 'position', new Float32BufferAttribute( vertices, 3 ) );
-		this.setAttribute( 'normal', new Float32BufferAttribute( normals, 3 ) );
-		this.setAttribute( 'uv', new Float32BufferAttribute( uvs, 2 ) );
-
-		function buildPlane( u, v, w, udir, vdir, width, height, depth, gridX, gridY, materialIndex ) {
+		function buildPlane(
+				u:string,
+				v:string,
+				w:string,
+				udir:number,
+				vdir:number,
+				width:number,
+				height:number,
+				depth:number,
+				alpha:number,
+				beta:number,
+				gamma:number,
+				gridX:number,
+				gridY:number,
+				materialIndex:number
+			) {
 
 			const segmentWidth = width / gridX;
 			const segmentHeight = height / gridY;
@@ -90,9 +82,6 @@ class BoxGeometry extends BufferGeometry {
 					vector[ v ] = y * vdir;
 					vector[ w ] = depthHalf;
 
-					const alpha = 90;
-					const beta = 90;
-					const gamma = 120;
 					const angle = Math.PI / 180;
 					// // var matrix = new Matrix3().setFromMatrix4(new Matrix4().makeRotationZ(-Math.PI/6));
 					// const matrix = new Matrix3().set(
@@ -108,12 +97,12 @@ class BoxGeometry extends BufferGeometry {
 
 					const a12 = vector.y * Math.cos(gamma * angle)
 					const a13 = vector.z * Math.cos(beta * angle)
-					
+
 					const a22 = vector.y * Math.sin(gamma * angle)
 					const a23 = vector.z * (Math.cos(alpha * angle) - Math.cos(beta * angle) * Math.cos(gamma * angle)) / Math.sin(gamma * angle)
-					
+
 					const a33 = vector.z * (Math.sqrt(1 - Math.pow(Math.cos(alpha * angle), 2) - Math.pow(Math.cos(beta * angle), 2) - Math.pow(Math.cos(gamma * angle), 2) + 2 * Math.cos(alpha * angle) * Math.cos(beta * angle) * Math.cos(gamma * angle))) / Math.sin(gamma * angle)
-					
+
 					//xyz = [A]*(xyz)
 					const x1 = vector.x + a12 + a13
 					const y1 = a22 + a23
@@ -121,7 +110,7 @@ class BoxGeometry extends BufferGeometry {
 
 					// const vector1 = vector.applyMatrix3(matrix)
 					// console.log(matrix, 'matrix');
-					
+
 
 					// now apply vector to vertex buffer
 					// debugger
@@ -193,15 +182,5 @@ class BoxGeometry extends BufferGeometry {
 			// console.log(vertices, 'vertices');
 			
 		}
-
 	}
-
-	static fromJSON( data ) {
-
-		return new BoxGeometry( data.width, data.height, data.depth, data.widthSegments, data.heightSegments, data.depthSegments );
-
-	}
-
 }
-
-export { BoxGeometry, BoxGeometry as BoxBufferGeometry };

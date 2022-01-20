@@ -1,5 +1,6 @@
 import { Site, PeriodicSite } from "./sites";
 import Lattice from './lattice'
+import { Species } from './structure.type'
 
 class Neighbor extends Site {
     /**
@@ -43,13 +44,13 @@ class IMolecule {
      */
 
     // lattice: number[] = [];
-    // species: any[] = [];
-    // coords: Array<any> = [];
+    // species: Species = [];
+    // coords: number[][] = [];
     // charge: number = 0;
     // validate_proximity: boolean = false;
     // to_unit_cell: boolean = false;
     // coords_are_cartesian: boolean = false;
-    // site_properties: Object = {};
+    // site_properties: {[key: string]: number};
 }
 
 class Molecule {
@@ -62,16 +63,16 @@ export class IStructure {
     /**
      * 具有周期性的基本不可变结构对象。
      */
-    sites:any[] = [];
+    sites:PeriodicSite[] = [];
     constructor(
-        public lattice:any,
-        public species: any[] = [],
-        public coords: Array<any> = [],
-        public charge: number = 0,
-        public validate_proximity: boolean = false,
-        public to_unit_cell: boolean = false,
-        public coords_are_cartesian: boolean = false,
-        public site_properties: Object = {},
+        public lattice:Lattice,
+        public species: Species = [],
+        public coords: number[][] = [],
+        public charge?: number,
+        public validate_proximity?: boolean,
+        public to_unit_cell?: boolean,
+        public coords_are_cartesian?: boolean,
+        public site_properties?: {[key: string]: number},
     ) {
 
         if (species.length !== coords.length) {
@@ -91,7 +92,7 @@ export class IStructure {
         for(let i = 0; i < species.length; i++) {
             const prop = {};
             this.sites.push(new PeriodicSite(
-                species[i],
+                [species[i]],
                 coords[i],
                 lattice,
                 to_unit_cell,
@@ -107,16 +108,16 @@ export class Structure extends IStructure {
      * 可变的结构对象。
      */
     constructor(
-        public lattice:any,
-        public species: any[] = [],
-        public coords: Array<any> = [],
-        public charge: number = 0,
-        public validate_proximity: boolean = false,
-        public to_unit_cell: boolean = false,
-        public coords_are_cartesian: boolean = false,
-        public site_properties: Object = {},
+        public lattice:Lattice,
+        public species: Species = [],
+        public coords: number[][] = [],
+        public charge?: number,
+        public validate_proximity?: boolean,
+        public to_unit_cell?: boolean,
+        public coords_are_cartesian?: boolean,
+        public site_properties?: {[key: string]: number},
     ) {
-        super(lattice, species, coords, charge, validate_proximity, to_unit_cell);
+        super(lattice, species, coords, charge, validate_proximity, to_unit_cell, coords_are_cartesian, site_properties);
 
         this.species = species;
         this.coords = coords;
