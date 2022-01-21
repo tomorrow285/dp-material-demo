@@ -56,8 +56,21 @@ export namespace Object3D {
   }
 
   export function demo() {
-    const lattice = Lattice.from_parameters(4.97352800, 4.97352800, 4.97352800, 90,
-      90, 90)
+    const lattice = Lattice.from_parameters(
+      4.97352800, 4.97352800, 4.97352800,
+      90, 90, 90
+    )
+    // const lattice2 = Lattice.from_parameters_old(
+    //   4.97352800, 4.97352800, 4.97352800,
+    //   90, 90, 90
+    // )
+
+
+    // console.log(lattice.matrix3)
+    // console.log(lattice2.matrix3)
+
+    // Lattice.from_parameters_new(4.97352800, 4.97352800, 4.97352800, 60,
+    //   90, 30)
     const coords = [
       [0.37280000, 0.37280000, 0.62720000],
       [0.62720000, 0.37280000, 0.37280000],

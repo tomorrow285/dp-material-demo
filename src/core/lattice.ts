@@ -33,7 +33,7 @@ export default class Lattice {
     }
 
     // 获取晶胞长度及角度
-    static from_parameters(a: number, b: number, c: number, alpha: number, beta: number, gamma: number) {
+    static from_parameters_old(a: number, b: number, c: number, alpha: number, beta: number, gamma: number) {
         const abc = [a, b, c];
         const angles = [alpha, beta, gamma];
 
@@ -55,6 +55,50 @@ export default class Lattice {
             a21, a22, a23,
             a31, a32, a33,
         ];
+
+        return new Lattice(a, b, c, alpha, beta, gamma, abc, angles, matrix3);
+    }
+
+    static from_parameters(a: number, b: number, c: number, alpha: number, beta: number, gamma: number) {
+        const abc = [a, b, c];
+        const angles = [alpha, beta, gamma];
+
+        const angles_r = angles.map(angle => angle * Math.PI / 180)
+        const [cos_alpha, cos_beta, cos_gamma] = angles_r.map(Math.cos)
+        const [sin_alpha, sin_beta] = angles_r.map(Math.sin)
+
+        const val = (() => {
+            const val = (cos_alpha * cos_beta - cos_gamma) / (sin_alpha * sin_beta)
+            const max_abs_val = 1
+            return Math.max(Math.min(val, max_abs_val), -max_abs_val)
+        })()
+        const gamma_star = Math.acos(val)
+
+        const matrix3 = new Matrix3();
+        matrix3.elements = [
+            a * sin_beta, 0.0, a * cos_beta,
+
+            -b * sin_alpha * Math.cos(gamma_star),
+            b * sin_alpha * Math.sin(gamma_star),
+            b * cos_alpha,
+
+            0.0, 0.0, c
+        ];
+
+        // const vector_a = [a * sin_beta, 0.0, a * cos_beta]
+        // const vector_b = [
+        //     -b * sin_alpha * Math.cos(gamma_star),
+        //     b * sin_alpha * Math.sin(gamma_star),
+        //     b * cos_alpha,
+        // ]
+        // const vector_c = [0.0, 0.0, c]
+
+        // console.log(cos_alpha, cos_beta, cos_gamma)
+        // console.log(sin_alpha, sin_beta)
+        // console.log(val)
+        // console.log('gamma_star', val, gamma_star, Math.cos(gamma_star))
+        // console.log(-b * sin_alpha, Math.cos(gamma_star), -b * sin_alpha * Math.cos(gamma_star))
+        // console.log(vector_a, vector_b, vector_c)
 
         return new Lattice(a, b, c, alpha, beta, gamma, abc, angles, matrix3);
     }
