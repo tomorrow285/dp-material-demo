@@ -1,6 +1,6 @@
-import * as THREE from 'three';
 import Lattice from './lattice'
 import { Species } from './structure.type'
+import Vector3 from '../math/vector3'
 
 
 export class Site {
@@ -59,7 +59,7 @@ export class Site {
      * @param other:site
      */
     distance(other: Site) {
-        return new THREE.Vector3(...this.coords).distanceTo(new THREE.Vector3(...other.coords))
+        return new Vector3(...this.coords).distanceTo(new Vector3(...other.coords))
     }
 
     /**

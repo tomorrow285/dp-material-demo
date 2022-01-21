@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import {BoxGeometry} from '../BoxGeometry'
+import BoxGeometry from '../BoxGeometry'
+import Vector3 from '../math/vector3'
 
 namespace Viewer {
   let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer;
@@ -10,9 +11,9 @@ namespace Viewer {
     showHelpers: false
   };
   const clipPlanes = [
-    new THREE.Plane(new THREE.Vector3(1, 0, 0), 0),
-    new THREE.Plane(new THREE.Vector3(0, - 1, 0), 0),
-    new THREE.Plane(new THREE.Vector3(0, 0, - 1), 0)
+    new THREE.Plane(new Vector3(1, 0, 0), 0),
+    new THREE.Plane(new Vector3(0, - 1, 0), 0),
+    new THREE.Plane(new Vector3(0, 0, - 1), 0)
   ];
 
   export function init() {
@@ -44,9 +45,9 @@ namespace Viewer {
     (() => {
       const material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 10 });
       const points = [];
-      points.push(new THREE.Vector3(-1, 0, 0));
-      points.push(new THREE.Vector3(0, 1, 0));
-      points.push(new THREE.Vector3(1, 0, 0));
+      points.push(new Vector3(-1, 0, 0));
+      points.push(new Vector3(0, 1, 0));
+      points.push(new Vector3(1, 0, 0));
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
       const line = new THREE.Line(geometry, material);
       scene.add(line);
@@ -75,7 +76,7 @@ namespace Viewer {
     // })();
 
     (() => {
-      const geometry = new BoxGeometry( 1, 2, 3 );
+      const geometry = new BoxGeometry( 1, 2, 3);
       console.log(geometry);
             const edges = new THREE.EdgesGeometry( geometry );
       const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffaa } ) );
@@ -121,10 +122,10 @@ namespace Viewer {
     //           //   -10, -10, -10
     //           // ] );
     //           const vertices1 = [
-    //             new THREE.Vector3(0,0,0),
-    //             new THREE.Vector3(0,3,10),
-    //             new THREE.Vector3(0,6,10),
-    //             new THREE.Vector3(0,3,0),
+    //             new Vector3(0,0,0),
+    //             new Vector3(0,3,10),
+    //             new Vector3(0,6,10),
+    //             new Vector3(0,3,0),
     //         ];
 
     

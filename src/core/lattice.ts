@@ -1,4 +1,5 @@
-import { Matrix3, Vector3 } from 'three';
+import Matrix3 from '../math/matrix3'
+import Vector3 from '../math/vector3'
 
 export default class Lattice {
     /**

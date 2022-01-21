@@ -1,9 +1,10 @@
 import * as THREE from "three"
+import Vector3 from '../../math/vector3'
 
 const sphereGeometry = new THREE.SphereGeometry(.2)
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1)
 
-export function createSphereObject(position: THREE.Vector3, color: string | number = 0xff0000) {
+export function createSphereObject(position: Vector3, color: string | number = 0xff0000) {
   // const material = new THREE.MeshBasicMaterial({ color });
   const material = new THREE.MeshPhongMaterial({ color });
   const object = new THREE.Mesh(sphereGeometry, material);
@@ -13,7 +14,7 @@ export function createSphereObject(position: THREE.Vector3, color: string | numb
   return object
 }
 
-export function createCylinderObject(start: THREE.Vector3, end: THREE.Vector3) {
+export function createCylinderObject(start: Vector3, end: Vector3) {
   // start.multiplyScalar(75);
   // end.multiplyScalar(75);
   // const boxGeometry = new THREE.CylinderGeometry(.05, .05, start.distanceTo(end), 32)
@@ -30,7 +31,7 @@ export function createCylinderObject(start: THREE.Vector3, end: THREE.Vector3) {
   return object
 }
 
-export function createLineObject(start: THREE.Vector3, end: THREE.Vector3) {
+export function createLineObject(start: Vector3, end: Vector3) {
   // start.multiplyScalar(75);
   // end.multiplyScalar(75);
   const material = new THREE.LineBasicMaterial({ color: 0x0000ff });

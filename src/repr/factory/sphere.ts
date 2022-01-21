@@ -2,8 +2,9 @@ import * as THREE from "three"
 import { Structure } from "../../core/structure";
 import { VESTA_COLOR } from "../schemes";
 import { createSphereObject } from "./object";
+import Vector3 from '../../math/vector3';
 
-type GetSphere = (structure: Structure) => THREE.Vector3[]
+type GetSphere = (structure: Structure) => Vector3[]
 
 export function SphereFactory(structure: Structure, getSphere: GetSphere) {
   const group = new THREE.Group();
@@ -29,6 +30,6 @@ export function SphereFactory(structure: Structure, getSphere: GetSphere) {
 export function getAtomSphereParmas(structure: Structure) {
   return structure.sites.map((site) => {
     const { coords } = site
-    return new THREE.Vector3(...coords)
+    return new Vector3(...coords)
   })
 }

@@ -1,5 +1,7 @@
 import * as THREE from "three"
 import bondLengthJSON from './bond_lengths.json'
+import Vector3 from '../math/vector3';
+
 
 
 const bondLengthData = (() => {
@@ -21,12 +23,12 @@ class Atom {
   distance(atom: Atom) {
     return this.position.distanceTo(atom.position)
   }
-  constructor(public type: string, public position: THREE.Vector3) { }
+  constructor(public type: string, public position: Vector3) { }
 }
 
 const list = [
-  new Atom('C', new THREE.Vector3(0, 0, 0)),
-  new Atom('C', new THREE.Vector3(0, 0, 1))
+  new Atom('C', new Vector3(0, 0, 0)),
+  new Atom('C', new Vector3(0, 0, 1))
 ]
 
 class CovalentBond {
