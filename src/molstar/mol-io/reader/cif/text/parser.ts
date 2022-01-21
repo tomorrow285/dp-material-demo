@@ -456,19 +456,19 @@ function moveNextInternal(state: TokenizerState) {
             // escaped is always Value
             if (state.isEscaped) {
                 state.tokenType = CifTokenType.Value;
-            // _ means column name, including _import.get
+                // _ means column name, including _import.get
             } else if (state.data.charCodeAt(state.tokenStart) === 95) { // _
                 if (state.inSaveFrame && isImportGet(state)) {
                     state.isImportGet = true;
                 }
                 state.tokenType = CifTokenType.ColumnName;
-            // 5th char needs to be _ for data_, save_ or loop_
+                // 5th char needs to be _ for data_, save_ or loop_
             } else if (state.tokenEnd - state.tokenStart >= 5 && state.data.charCodeAt(state.tokenStart + 4) === 95) {
                 if (isData(state)) state.tokenType = CifTokenType.Data;
                 else if (isSave(state)) state.tokenType = CifTokenType.Save;
                 else if (isLoop(state)) state.tokenType = CifTokenType.Loop;
                 else state.tokenType = CifTokenType.Value;
-            // all other tests failed, we are at Value token.
+                // all other tests failed, we are at Value token.
             } else {
                 state.tokenType = CifTokenType.Value;
             }
@@ -736,7 +736,7 @@ async function parseInternal(data: string, runtimeCtx: RuntimeContext) {
             blockCtx = FrameContext();
             saveFrames = [];
             moveNext(tokenizer);
-        // Save frame
+            // Save frame
         } else if (token === CifTokenType.Save) {
             if (tokenizer.tokenEnd - tokenizer.tokenStart === 5) { // end of save frame
                 if (saveCtx.categoryNames.length > 0) {
@@ -753,19 +753,19 @@ async function parseInternal(data: string, runtimeCtx: RuntimeContext) {
                 // saveFrame = CifSaveFrame(saveCtx, saveHeader);
             }
             moveNext(tokenizer);
-        // Loop
+            // Loop
         } else if (token === CifTokenType.Loop) {
             const cat = await handleLoop(tokenizer, tokenizer.inSaveFrame ? saveCtx : blockCtx);
             if (cat.hasError) {
                 return error(cat.errorLine, cat.errorMessage);
             }
-        // Single row
+            // Single row
         } else if (token === CifTokenType.ColumnName) {
             const cat = handleSingle(tokenizer, tokenizer.inSaveFrame ? saveCtx : blockCtx);
             if (cat.hasError) {
                 return error(cat.errorLine, cat.errorMessage);
             }
-        // Out of options
+            // Out of options
         } else {
             console.log(tokenizer.tokenType, Tokenizer.getTokenString(tokenizer));
             return error(tokenizer.lineNumber, 'Unexpected token. Expected data_, loop_, or data name.');
@@ -785,10 +785,8 @@ async function parseInternal(data: string, runtimeCtx: RuntimeContext) {
 }
 
 export function parseCifText(data: string) {
-    console.log('parseCifText')
     return Task.create<Result<Data.CifFile>>('Parse CIF', async ctx => {
         const res = await parseInternal(data, ctx)
-        console.log('res', res)
         return res;
     });
 }

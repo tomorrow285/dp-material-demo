@@ -1,53 +1,59 @@
 import { useEffect, useState } from 'react'
-import { parse } from './cif-tools/Text/Parser'
 import { parseCifText } from './molstar/mol-io/reader/cif/text/parser'
-import { CIFLoader } from  'cifloader3'
 import {Object3D} from './viewer/Object3D'
-import {demoGeometry} from './viewer/StructureGeometry'
-import Viewer from './viewer'
+import {H4C_mp, BeCN2_mp, FeCl4_mp, Mg149Ti_mp} from './demo-file'
 import './App.css'
-import Lattice from './core/lattice'
-import {Structure} from './core/structure'
-
-const loader = new CIFLoader();
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [name, setName] = useState('')
+
+  const parseCifFile = (str: string) => {
+    parseCifText(str as string).run().then((res) => {
+      if (res.isError) {
+        return alert('文件解析失败')
+      }
+      try {
+        const {blocks} = res.result
+        const cifBlock = blocks[0]
+        if (!cifBlock) {
+          return alert('文件解析失败')
+        }
+        setName(cifBlock.header)
+        Object3D.readCif(cifBlock)
+      } catch (e) {
+        alert('文件解析失败')
+      }
+    })
+  }
 
   useEffect(() => {
-    // Viewer.init()
     Object3D.init()
-    // Object3D.add(demoGeometry)
-    // const lattice = Lattice.from_parameters(3.84, 3.84, 3.84, 120,
-    //   90, 60)
-    // console.log("lattice",lattice);
-    
-    // const coords = [[0, 0, 0], [0.75,0.5,0.75]]
-    // const struct = new Structure(lattice, ["C", "H"], coords)
-    // console.log("struct",struct);
-    return () => {
-      // Viewer.dispose()
-    }
-
+    parseCifFile(H4C_mp)
+    // return () => {
+    //   // Viewer.dispose()
+    // }
   }, [])
 
   return (
     <div className="App">
-      <input type="file" onChange={(e) => {
+      <input type="file" accept='.cif' onChange={(e) => {
         const { files } = e.target
         const file = files![0]
         const reader = new FileReader()
         reader.readAsText(file)
         reader.onload = () => {
           const result = reader.result
-          console.log('cif-tools', parse(result as string))
-          parseCifText(result as string).run().then((res) => {
-            console.log('parseCifText', res)
-          })
-          
-          console.log('CIFLoader', loader.parse(result as string))
+          parseCifFile(result as string)
         }
       }} />
+      <div className='demo-tit'>{name}</div>
+      <div className='demo-file'>
+        <h2>Demo File</h2>
+        <button onClick={() => parseCifFile(H4C_mp)}>H4C_mp-1021328</button>
+        <button onClick={() => parseCifFile(BeCN2_mp)}>BeCN2_mp-1189451</button>
+        <button onClick={() => parseCifFile(FeCl4_mp)}>FeCl4_mp-1225059</button>
+        <button onClick={() => parseCifFile(Mg149Ti_mp)}>Mg149Ti_mp-1185639</button>
+      </div>
     </div>
   )
 }
