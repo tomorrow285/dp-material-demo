@@ -1,9 +1,10 @@
 import * as THREE from "three"
 import { Structure } from "../../core/structure";
 import { createCylinderObject } from "./object";
+import Vector3 from '../../math/vector3'
 
 
-type GetCylinder = (structure: Structure) => [THREE.Vector3, THREE.Vector3][]
+type GetCylinder = (structure: Structure) => [Vector3, Vector3][]
 
 export function CylinderFactory(structure: Structure, getCylinder: GetCylinder) {
   const group = new THREE.Group();
@@ -24,7 +25,7 @@ export function CylinderFactory(structure: Structure, getCylinder: GetCylinder) 
   }
 }
 
-export function getBondsCylinderParmas(structure: Structure): [THREE.Vector3, THREE.Vector3][] {
+export function getBondsCylinderParmas(structure: Structure): [Vector3, Vector3][] {
   const { sites } = structure
   const bonds = new Map<string, number[]>()
   const invertedBonds = new Set<string>()
@@ -45,8 +46,8 @@ export function getBondsCylinderParmas(structure: Structure): [THREE.Vector3, TH
   return [...bonds.values()].map((bond => {
     const [s, e] = bond
     return [
-      new THREE.Vector3(...sites[s].coords),
-      new THREE.Vector3(...sites[e].coords)
+      new Vector3(...sites[s].coords),
+      new Vector3(...sites[e].coords)
     ]
   }))
 }

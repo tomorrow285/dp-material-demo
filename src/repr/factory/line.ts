@@ -1,8 +1,9 @@
 import * as THREE from "three"
 import { Structure } from "../../core/structure";
-import { createLineObject } from "./object";
+import { createLineObject } from "./object"
+import Vector3 from '../../math/vector3';
 
-type GetLine = (structure: Structure) => [THREE.Vector3, THREE.Vector3][]
+type GetLine = (structure: Structure) => [Vector3, Vector3][]
 
 export function LineFactory(structure: Structure, getCylinder: GetLine) {
   const group = new THREE.Group();
@@ -17,7 +18,7 @@ export function LineFactory(structure: Structure, getCylinder: GetLine) {
       // const positions = new Array(6).fill('').map((a, i) => {
       //   const n = .4 * i
       //   const j = .4
-      //   return [new THREE.Vector3(n, n, n), new THREE.Vector3(n, j, j)]
+      //   return [new Vector3(n, n, n), new Vector3(n, j, j)]
       // })
       positions.forEach(([s, e]) => {
         const object = createLineObject(s, e)
@@ -31,16 +32,16 @@ export function LineFactory(structure: Structure, getCylinder: GetLine) {
   }
 }
 
-export function getUnitCellLineParmas(structure: Structure): [THREE.Vector3, THREE.Vector3][] {
+export function getUnitCellLineParmas(structure: Structure): [Vector3, Vector3][] {
   // const { matrix3 } = structure.lattice
-  // // const lines: THREE.Vector3[][] = []
-  // const points: THREE.Vector3[] = new Array(8).fill('').map(() => new THREE.Vector3)
+  // // const lines: Vector3[][] = []
+  // const points: Vector3[] = new Array(8).fill('').map(() => new Vector3)
   // matrix3.extractBasis(points[1], points[2], points[3])
   // points[5] = points[1].add(points[3])
   // points[6] = points[1].add(points[2])
   // points[7] = points[2].add(points[3])
   // points[4] = points[2].add(points[5])
-  // // const lines: THREE.Vector3[][] = [[0, 1]].map(([s, e]) => [points[s], points[e]])
+  // // const lines: Vector3[][] = [[0, 1]].map(([s, e]) => [points[s], points[e]])
   // // lines.push([points[0], points[1]])
   // // console.log(matrix3, a, b, c)
   // console.log(matrix3)
@@ -51,5 +52,5 @@ export function getUnitCellLineParmas(structure: Structure): [THREE.Vector3, THR
   //   [2, 5], [2, 7], [3, 5], [3, 6],
   // ].map(([s, e]) => [points[s], points[e]])
 
-  return [[new THREE.Vector3, new THREE.Vector3]]
+  return [[new Vector3, new Vector3]]
 }

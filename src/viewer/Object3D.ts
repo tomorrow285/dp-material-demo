@@ -5,13 +5,15 @@ import Lattice from '../core/lattice';
 import { Structure } from '../core/structure';
 import { CifBlock } from '../molstar/mol-io/reader/cif';
 import { BallStickRepresentation } from '../repr/ball-stick';
+import Vector3 from '../math/vector3'
+import Matrix3 from '../math/matrix3'
 // import { CovalentBond } from '../repr/bonds';
 
 // TODO: rename => visualizer
 
 export namespace Object3D {
   let camera: THREE.PerspectiveCamera, scene: THREE.Scene, renderer: THREE.WebGLRenderer, controls: OrbitControls, group: THREE.Group;
-  let offset: THREE.Vector3, sphereGeometry: THREE.IcosahedronGeometry, boxGeometry: THREE.BoxGeometry;
+  let offset: Vector3, sphereGeometry: THREE.IcosahedronGeometry, boxGeometry: THREE.BoxGeometry;
 
   export function init() {
     scene = new THREE.Scene();
@@ -42,7 +44,7 @@ export namespace Object3D {
     controls.maxDistance = 20;
     controls.addEventListener('change', render)
 
-    offset = new THREE.Vector3()
+    offset = new Vector3()
     sphereGeometry = new THREE.IcosahedronGeometry(1, 3)
     boxGeometry = new THREE.BoxGeometry(1, 1, 1)
 
