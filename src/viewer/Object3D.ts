@@ -16,8 +16,8 @@ export namespace Object3D {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
 
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 5000);
-    camera.position.z = 1000;
+    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 200);
+    camera.position.z = 10;
     scene.add(camera);
 
     const light1 = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -37,17 +37,26 @@ export namespace Object3D {
     document.body.appendChild(renderer.domElement);
 
     controls = new OrbitControls(camera, renderer.domElement);
-    controls.minDistance = 500;
-    controls.maxDistance = 2000;
+    controls.minDistance = 10;
+    controls.maxDistance = 20;
     controls.addEventListener('change', render)
 
     offset = new THREE.Vector3()
     sphereGeometry = new THREE.IcosahedronGeometry(1, 3)
     boxGeometry = new THREE.BoxGeometry(1, 1, 1)
 
+
+    const camera_m = new THREE.Matrix3().set(
+      window.innerWidth, 0, 0,
+      0, window.innerHeight, 0,
+      0, 0, 5000 / 2
+    )
+
+    console.log(camera_m)
+    console.log(camera)
+
+
     demo()
-
-
     // CovalentBond.getCovalentBonds()
   }
 
@@ -62,7 +71,7 @@ export namespace Object3D {
     )
     // const lattice2 = Lattice.from_parameters_old(
     //   4.97352800, 4.97352800, 4.97352800,
-    //   90, 90, 90
+    //   60, 90, 30
     // )
 
 
@@ -83,6 +92,7 @@ export namespace Object3D {
       [0.00000000, 0.00000000, 0.00000000],
       [0.50000000, 0.50000000, 0.50000000],
     ]
+    // console.log(lattice.matrix3)
     const struct = new Structure(lattice, ["H", "H", "H", "H", "H", "H", "H", "H", "C", "C"], coords)
 
     // console.log(struct.sites[0])

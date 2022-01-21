@@ -143,6 +143,8 @@ export class PeriodicSite extends Site {
         // 转换为笛卡尔坐标
         this.coords = this.lattice.get_cartesian_coords(this.frac_coords)
 
+        // console.log('this.coords', this.coords, species)
+
         const [a, b, c] = this.frac_coords;
         this.a = a;
         this.b = b;

@@ -45,10 +45,10 @@ export function getUnitCellLineParmas(structure: Structure): [THREE.Vector3, THR
   // // console.log(matrix3, a, b, c)
   // console.log(matrix3)
   // return [
-  //   [0, 1], [0, 2], [0, 3],
-  //   // [0, 1], [0, 2], [0, 3], [4, 5],
-  //   // [4, 6], [4, 7], [1, 6], [1, 7],
-  //   // [2, 5], [2, 7], [3, 5], [3, 6],
+  //   // [0, 1], [0, 2], [0, 3],
+  //   [0, 1], [0, 2], [0, 3], [4, 5],
+  //   [4, 6], [4, 7], [1, 6], [1, 7],
+  //   [2, 5], [2, 7], [3, 5], [3, 6],
   // ].map(([s, e]) => [points[s], points[e]])
 
   return [[new THREE.Vector3, new THREE.Vector3]]
